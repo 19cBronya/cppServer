@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Server - 聊天界面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 24px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #messageInput:focus {
+            border-color: #667eea;
+        }
+
+        #sendButton {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #sendButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #sendButton:active {
+            transform: translateY(0);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .info-bar {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .session-id {
+            font-family: monospace;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 4px 12px;
+            font-size: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-small:hover {
+            background: #5568d3;
+        }
+
+        /* 滚动条样式 */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💬 ChatGPT Server</h1>
+            <p>基于 C++ 的高性能聊天服务器</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="message-content">
+                    <div>你好！我是 ChatGPT Server。有什么我可以帮助你的吗？</div>
+                    <div class="message-time">系统消息</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">正在处理...</div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="输入消息..." 
+                    autocomplete="off"
+                >
+                <button id="sendButton">发送</button>
+            </div>
+        </div>
+
+        <div class="info-bar">
+            <div>
+                会话ID: <span class="session-id" id="sessionId">未创建</span>
+            </div>
+            <div class="button-group">
+                <button class="btn-small" id="newSessionBtn">新会话</button>
+                <button class="btn-small" id="metricsBtn">查看指标</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = null;
+
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const loading = document.getElementById('loading');
+        const sessionIdDisplay = document.getElementById('sessionId');
+        const newSessionBtn = document.getElementById('newSessionBtn');
+        const metricsBtn = document.getElementById('metricsBtn');
+
+        // 添加消息到聊天窗口
+        function addMessage(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN');
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div>${escapeHtml(content)}</div>
+                    <div class="message-time">${timeStr}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 转义 HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 发送消息
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // 禁用输入
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+            loading.classList.add('active');
+
+            // 显示用户消息
+            addMessage('user', message);
+            messageInput.value = '';
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId || ''
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // 保存会话ID
+                    if (data.session_id) {
+                        sessionId = data.session_id;
+                        sessionIdDisplay.textContent = sessionId;
+                    }
+
+                    // 显示助手回复
+                    addMessage('assistant', data.reply);
+                } else {
+                    addMessage('assistant', '错误: ' + (data.error || '服务器错误'));
+                }
+            } catch (error) {
+                addMessage('assistant', '错误: 无法连接到服务器');
+                console.error('Error:', error);
+            } finally {
+                // 恢复输入
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                loading.classList.remove('active');
+                messageInput.focus();
+            }
+        }
+
+        // 创建新会话
+        function newSession() {
+            sessionId = null;
+            sessionIdDisplay.textContent = '未创建';
+            chatMessages.innerHTML = `
+                <div class="message assistant">
+                    <div class="message-content">
+                        <div>新会话已创建。有什么我可以帮助你的吗？</div>
+                        <div class="message-time">系统消息</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 查看指标
+        async function showMetrics() {
+            try {
+                const response = await fetch('/metrics');
+                const data = await response.json();
+                
+                const metricsText = `系统指标:\n` +
+                    `总会话数: ${data.total_sessions}\n` +
+                    `总消息数: ${data.total_messages}`;
+                
+                addMessage('assistant', metricsText);
+            } catch (error) {
+                addMessage('assistant', '错误: 无法获取指标');
+                console.error('Error:', error);
+            }
+        }
+
+        // 事件监听
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        newSessionBtn.addEventListener('click', newSession);
+        metricsBtn.addEventListener('click', showMetrics);
+
+        // 自动聚焦输入框
+        messageInput.focus();
+    </script>
+</body>
+</html>

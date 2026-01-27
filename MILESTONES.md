@@ -119,16 +119,27 @@ curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
 
 ---
 
-## Milestone 3: 工程化组件拼齐
+## Milestone 3: 工程化组件拼齐 ✅ (2026-01-28)
 
 **目标**: 从"能跑"进化到"像企业项目"
 
 ### 交付物/验收
 
-- [ ] Logger：分级、滚动、格式统一（部分完成）
-- [ ] Router：路由表（/health、/chat、/metrics）
-- [ ] Database：至少存储会话/对话记录（支持查询/回放）
-- [ ] UI：最简单聊天页能用（哪怕很朴素）
+- [x] Logger：分级、滚动、格式统一
+- [x] Router：路由表（/health、/chat、/metrics、/history）
+- [x] Database：存储会话/对话记录（支持查询/回放）
+- [x] UI：简单聊天页可用（现代化设计）
+
+### 完成内容
+
+- ✅ 日志滚动功能（按文件大小，默认 10MB，保留 5 个文件）
+- ✅ SQLite 数据库集成（会话和消息表）
+- ✅ RESTful API（/chat、/history、/metrics）
+- ✅ 静态文件服务（HTML/CSS/JS）
+- ✅ 完整的聊天 Web UI（渐变设计、响应式布局）
+- ✅ JSON 工具类（简单解析和生成）
+
+**详细报告**: 见 [MILESTONE3_SUMMARY.md](MILESTONE3_SUMMARY.md)
 
 ---
 

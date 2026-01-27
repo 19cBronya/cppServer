@@ -27,6 +27,8 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 # 链接库
 target_link_libraries(${PROJECT_NAME} 
     pthread
+    sqlite3
+    stdc++fs
     ${CMAKE_DL_LIBS}
 )
 

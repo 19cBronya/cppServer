@@ -12,7 +12,7 @@ echo "Starting ChatGPT Server on port $PORT..."
 # 创建日志目录
 mkdir -p "$PROJECT_ROOT/logs"
 
-# 运行服务器
-cd "$PROJECT_ROOT/build/bin"
-./ChatGPTServer "$PORT"
+# 运行服务器（从项目根目录，这样可以找到 static/ 目录）
+cd "$PROJECT_ROOT"
+./build/bin/ChatGPTServer "$PORT"
 
