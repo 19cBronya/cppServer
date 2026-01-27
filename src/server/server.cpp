@@ -1,6 +1,7 @@
 #include "server/server.h"
 #include "logger/logger.h"
 #include "utils/signal_handler.h"
+#include "http_parser.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -8,6 +9,7 @@
 #include <csignal>
 #include <cstring>
 #include <cerrno>
+#include <sstream>
 
 Server::Server(uint16_t port) : m_port(port), m_listenFd(-1), m_running(false) {
 }
@@ -121,17 +123,49 @@ void Server::run() {
         inet_ntop(AF_INET, &clientAddr.sin_addr, clientIp, INET_ADDRSTRLEN);
         LOG_INFO("Accepted connection from " + std::string(clientIp) + ":" + std::to_string(ntohs(clientAddr.sin_port)));
         
-        // 简单的响应（后续会实现 HTTP 解析）
-        const char* response = "HTTP/1.1 200 OK\r\n"
-                              "Content-Type: text/plain\r\n"
-                              "Content-Length: 13\r\n"
-                              "\r\n"
-                              "Hello, World!";
-        send(clientFd, response, strlen(response), 0);
+        // 处理客户端请求
+        handleClient(clientFd);
         close(clientFd);
     }
     
     LOG_INFO("Server stopped");
+}
+
+void Server::handleClient(int clientFd) {
+    // 读取 HTTP 请求
+    std::string rawRequest = readRequest(clientFd);
+    
+    if (rawRequest.empty()) {
+        LOG_WARN("Empty request received");
+        return;
+    }
+    
+    // 解析 HTTP 请求
+    HttpRequest request = HttpParser::parseRequest(rawRequest);
+    
+    // 使用路由处理请求
+    HttpResponse response = m_router.handleRequest(request);
+    
+    // 发送响应
+    std::string rawResponse = response.toString();
+    send(clientFd, rawResponse.c_str(), rawResponse.length(), 0);
+}
+
+std::string Server::readRequest(int clientFd) {
+    const int BUFFER_SIZE = 4096;
+    char buffer[BUFFER_SIZE];
+    std::ostringstream oss;
+    
+    // 读取数据（简单实现，后续可优化）
+    ssize_t n = recv(clientFd, buffer, BUFFER_SIZE - 1, 0);
+    if (n > 0) {
+        buffer[n] = '\0';
+        oss << buffer;
+    } else if (n < 0) {
+        LOG_ERROR("Failed to read from client: " + std::string(strerror(errno)));
+    }
+    
+    return oss.str();
 }
 
 void Server::cleanup() {

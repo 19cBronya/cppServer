@@ -66,15 +66,25 @@ make run
 ### 测试
 
 ```bash
-# 启动服务器后，在另一个终端测试
-curl http://localhost:8080/
-# 应该返回 "Hello, World!"
+# 测试 API 端点
+curl http://localhost:8080/              # 欢迎页面
+curl http://localhost:8080/health        # 健康检查（JSON）
+curl -X POST http://localhost:8080/echo \
+  -H "Content-Type: application/json" \
+  -d '{"test":"data"}'                   # Echo 回显
+
+# 运行单元测试
+./build/bin/test_http_parser             # HTTP 解析器测试
+./build/bin/test_router                  # 路由系统测试
+
+# 运行集成测试
+./scripts/quick_test.sh                  # 自动化端到端测试
 ```
 
 ## 里程碑进度
 
 - [x] Milestone 0: 工程骨架 & 最小可跑
-- [ ] Milestone 1: 最小服务器 Demo
+- [x] Milestone 1: 最小服务器 Demo (HTTP 解析 + 路由 + 测试)
 - [ ] Milestone 2: 高并发网络与多线程
 - [ ] Milestone 3: 工程化组件
 - [ ] Milestone 4: Docker 化部署

@@ -35,22 +35,50 @@ curl http://localhost:8080/
 
 ---
 
-## Milestone 1: 最小服务器 Demo 🚧
+## Milestone 1: 最小服务器 Demo ✅ (2026-01-28)
 
 **目标**: 先把"能收请求→能回响应"打通
 
 ### 交付物/验收
 
-- [ ] 支持 HTTP 基本解析（或先做极简协议也行，但最终要 HTTP）
-- [ ] 单连接/少量连接下稳定工作
-- [ ] 单元测试/简单集成测试（至少有一套可复现用例）
+- [x] 支持 HTTP 基本解析（方法、路径、头部、Body）
+- [x] 单连接/少量连接下稳定工作
+- [x] 单元测试/简单集成测试（至少有一套可复现用例）
 
-### 计划实现
+### 完成情况
 
-- HTTP 请求解析器
-- HTTP 响应构建器
-- 路由系统（/health, /chat 等）
-- 单元测试框架
+- ✅ HTTP 解析器（parseRequest, createResponse, toString）
+- ✅ 路由系统（路由注册、匹配、404/400/500 处理）
+- ✅ Server 集成（HTTP 解析 + 路由分发）
+- ✅ 示例路由（/, /health, /echo）
+- ✅ 单元测试（34 个测试，全部通过）
+  - test_http_parser: 25/25 ✅
+  - test_router: 9/9 ✅
+- ✅ 集成测试（4 个端点测试，全部通过）
+
+### 测试方法
+
+```bash
+# 编译
+./scripts/build.sh
+
+# 运行服务器
+./scripts/run.sh
+
+# 运行单元测试
+./build/bin/test_http_parser
+./build/bin/test_router
+
+# 运行集成测试
+./scripts/quick_test.sh
+
+# 手动测试 API
+curl http://localhost:8080/health
+curl http://localhost:8080/
+curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
+```
+
+**详细报告**: 见 [MILESTONE1_SUMMARY.md](MILESTONE1_SUMMARY.md)
 
 ---
 
