@@ -57,11 +57,16 @@ int main(int argc, char* argv[]) {
     
     // 创建服务器实例
     uint16_t port = 8080;
+    size_t numThreads = 0;  // 0 = 使用硬件并发数
+    
     if (argc > 1) {
         port = static_cast<uint16_t>(std::stoi(argv[1]));
     }
+    if (argc > 2) {
+        numThreads = static_cast<size_t>(std::stoi(argv[2]));
+    }
     
-    Server server(port);
+    Server server(port, numThreads);
     
     // 注册路由
     LOG_INFO("Registering routes...");

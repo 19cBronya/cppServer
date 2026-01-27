@@ -82,16 +82,40 @@ curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
 
 ---
 
-## Milestone 2: 高并发网络与多线程
+## Milestone 2: 高并发网络与多线程 ✅ (2026-01-28)
 
 **目标**: 让服务器"接得住、稳得住"
 
 ### 交付物/验收
 
-- [ ] epoll reactor 或类似事件驱动模型
-- [ ] 线程池：任务队列 + worker + 优雅关闭
-- [ ] 过载保护：超时/限流/拒绝策略（防雪崩）
-- [ ] 压测：本地压到一定并发，P99 不崩、错误率可控
+- [x] epoll reactor 或类似事件驱动模型
+- [x] 线程池：任务队列 + worker + 优雅关闭
+- [x] 过载保护：超时/限流/拒绝策略（防雪崩）
+- [x] 压测：本地压到一定并发，P99 不崩、错误率可控
+
+### 完成内容
+
+- ✅ EpollReactor（epoll 事件驱动，边缘触发）
+- ✅ ThreadPool（任务队列 + worker 线程 + 优雅关闭）
+- ✅ ConnectionManager（连接限制 + 超时检测 + 拒绝策略）
+- ✅ Server 集成（epoll + 线程池 + 过载保护）
+- ✅ 压测脚本（Python + Shell）
+- ✅ 性能验证（100 并发，1785 QPS，P99: 83ms）
+
+### 性能数据
+
+```
+压测配置:
+  - 并发: 100
+  - 总请求: 10000
+  
+结果:
+  - 成功率: 99.90%
+  - QPS: 1785.36
+  - P99 延迟: 83.05 ms
+```
+
+**详细报告**: 见 [MILESTONE2_SUMMARY.md](MILESTONE2_SUMMARY.md)
 
 ---
 

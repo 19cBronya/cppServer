@@ -85,14 +85,32 @@ curl -X POST http://localhost:8080/echo \
 
 - [x] Milestone 0: 工程骨架 & 最小可跑
 - [x] Milestone 1: 最小服务器 Demo (HTTP 解析 + 路由 + 测试)
-- [ ] Milestone 2: 高并发网络与多线程
+- [x] Milestone 2: 高并发网络与多线程 (epoll + 线程池 + 过载保护)
 - [ ] Milestone 3: 工程化组件
 - [ ] Milestone 4: Docker 化部署
 - [ ] Milestone 5: LLM Serving
 - [ ] Milestone 6: 性能工程
 
-## 开发计划
+## 性能指标 (Milestone 2)
 
-详见各里程碑文档。
+- **并发**: 100+ 并发连接
+- **吞吐**: 1785 QPS
+- **延迟**: P99 < 85ms
+- **成功率**: 99.9%
 
-# cppServer
+## 项目文档
+
+- [README.md](README.md) - 项目说明（本文档）
+- [MILESTONES.md](MILESTONES.md) - 里程碑跟踪
+- [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) - 项目总览
+- [PERFORMANCE.md](PERFORMANCE.md) - 性能测试报告
+- [MILESTONE1_SUMMARY.md](MILESTONE1_SUMMARY.md) - M1 完成总结
+- [MILESTONE2_SUMMARY.md](MILESTONE2_SUMMARY.md) - M2 完成总结
+- [QUICKSTART.md](QUICKSTART.md) - 快速入门
+
+## 下一步
+
+- Milestone 3: 工程化组件（Logger 增强、Database、UI）
+- Milestone 4: Docker 化部署
+- Milestone 5: LLM Serving
+- Milestone 6: 性能工程（KV-cache、batching）
