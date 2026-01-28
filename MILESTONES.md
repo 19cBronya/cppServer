@@ -143,19 +143,8 @@ curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
 
 ---
 
-## Milestone 4: Docker 化部署 & 上线复现
 
-**目标**: 把"可复现部署"做出来
-
-### 交付物/验收
-
-- [ ] Dockerfile + docker-compose（nginx + backend + db + llm 服务）
-- [ ] 新机器/新环境：只按 README 操作即可跑起来
-- [ ] Nginx 反向代理打通（/api 转发到 C++ 服务）
-
----
-
-## Milestone 5: LLM Serving
+## Milestone 4: LLM Serving
 
 **目标**: 让你的系统真的能"像 ChatGPT 一样回答"
 
@@ -167,7 +156,7 @@ curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
 
 ---
 
-## Milestone 6: 性能工程
+## Milestone 5: 性能工程
 
 **目标**: 你课程的"核心亮点"，也是简历最值钱的部分
 
@@ -179,3 +168,14 @@ curl -X POST http://localhost:8080/echo -d '{"test":"data"}'
   - batching：合并请求提高吞吐（并给出前后对比数据）
 - [ ] 写一份《性能优化报告》：问题→定位→方案→结果→代价/边界
 
+---
+
+## Milestone 6: Docker 化部署 & 上线复现
+
+**目标**: 把"可复现部署"做出来
+
+### 交付物/验收
+
+- [ ] Dockerfile + docker-compose（nginx + backend + db + llm 服务）
+- [ ] 新机器/新环境：只按 README 操作即可跑起来
+- [ ] Nginx 反向代理打通（/api 转发到 C++ 服务）
