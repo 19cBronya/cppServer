@@ -47,8 +47,10 @@
 │  │  ┌────────────────────────────┐      │      │
 │  │  │ GET  /                     │      │      │
 │  │  │ GET  /health               │      │      │
+│  │  │ POST /chat                 │      │      │
+│  │  │ GET  /history              │      │      │
+│  │  │ GET  /metrics              │      │      │
 │  │  │ POST /echo                 │      │      │
-│  │  │ POST /chat/completions     │      │      │
 │  │  └────────────────────────────┘      │      │
 │  └──────────┬───────────────────────────┘      │
 │             │                                    │
@@ -91,12 +93,15 @@ cppServer/
 │   │   ├── router.h           # 路由系统
 │   │   ├── epoll_reactor.h    # epoll 事件循环
 │   │   └── connection_manager.h # 连接管理
+│   ├── database/              # 数据库（M3+）
+│   │   └── database.h         # SQLite 封装
 │   ├── http_parser.h          # HTTP 解析器
 │   ├── logger/
-│   │   └── logger.h           # 日志系统
+│   │   └── logger.h           # 日志系统（M3 增强）
 │   └── utils/
 │       ├── signal_handler.h   # 信号处理
-│       └── thread_pool.h      # 线程池
+│       ├── thread_pool.h      # 线程池
+│       └── json_helper.h      # JSON 工具（M3+）
 │
 ├── src/                        # 源文件
 │   ├── main.cpp               # 主程序
@@ -117,12 +122,19 @@ cppServer/
 │   ├── benchmark.sh           # Shell 压测
 │   └── simple_benchmark.py    # Python 压测
 │
+├── static/                    # 静态文件（M3+）
+│   └── index.html             # 聊天 UI
+│
+├── data/                      # 数据目录（M3+，运行时生成）
+│   └── chat.db                # SQLite 数据库
+│
 ├── CMakeLists.txt             # CMake 配置
 ├── Makefile                   # Make 配置
 ├── README.md                  # 项目说明
 ├── MILESTONES.md              # 里程碑跟踪
 ├── MILESTONE1_SUMMARY.md      # M1 总结
 ├── MILESTONE2_SUMMARY.md      # M2 总结
+├── MILESTONE3_SUMMARY.md      # M3 总结
 ├── PERFORMANCE.md             # 性能报告
 └── PROJECT_OVERVIEW.md        # 本文档
 ```
@@ -160,13 +172,21 @@ cppServer/
 - P99 延迟: 83ms ✅
 - 成功率: 99.9% ✅
 
-## 待完成的里程碑
+### Milestone 3: 工程化组件 ✅
+- Logger 增强（日志滚动、分级、格式统一）
+- Database 集成（SQLite3 会话/对话记录存储）
+- Router 增强（/chat、/history、/metrics 端点）
+- Web UI（现代化聊天界面）
+- 静态文件服务
+- JSON 工具类
 
-### Milestone 3: 工程化组件
-- [ ] Logger 增强（滚动、分级、格式统一）
-- [ ] Database 集成（会话/对话记录存储）
-- [ ] Metrics 端点（/stats, /metrics）
-- [ ] Web UI（简单聊天界面）
+**关键指标**:
+- 日志滚动: 10MB/文件，保留 5 个 ✅
+- 数据库: SQLite3（2 表 + 索引）✅
+- 路由: 6 个端点 ✅
+- UI: 响应式聊天界面 ✅
+
+## 待完成的里程碑
 
 ### Milestone 4: Docker 化部署
 - [ ] Dockerfile
@@ -242,9 +262,19 @@ python3 scripts/simple_benchmark.py
 curl http://localhost:8080/health
 # => {"status":"ok","service":"ChatGPT Server"}
 
-# 根路径
+# 根路径（Milestone 3: 聊天 UI）
 curl http://localhost:8080/
-# => Welcome to ChatGPT Server!...
+# => <html>... 聊天界面 ...</html>
+
+# 聊天 API（Milestone 3）
+curl -X POST http://localhost:8080/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Hello","session_id":""}'
+# => {"session_id":"...", "message":"Hello", "reply":"..."}
+
+# 系统指标（Milestone 3）
+curl http://localhost:8080/metrics
+# => {"service":"ChatGPT Server","total_sessions":5,"total_messages":20}
 
 # Echo
 curl -X POST http://localhost:8080/echo \
@@ -342,5 +372,5 @@ MIT License
 ---
 
 **最后更新**: 2026-01-28  
-**当前版本**: v0.2.0-milestone2  
-**下一个里程碑**: Milestone 3 - 工程化组件
+**当前版本**: v0.3.0-milestone3  
+**下一个里程碑**: Milestone 4 - Docker 化部署

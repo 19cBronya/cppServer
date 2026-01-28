@@ -35,6 +35,10 @@ cppServer/
 - C++17 编译器 (g++ 7+ 或 clang++)
 - Make 或 CMake (3.15+)
 - Linux 系统（支持 epoll）
+- SQLite3 开发库（Milestone 3+）
+  ```bash
+  sudo apt-get install -y libsqlite3-dev
+  ```
 
 ### 编译方式一：使用 Makefile（推荐，无需 CMake）
 
@@ -66,19 +70,27 @@ make run
 ### 测试
 
 ```bash
-# 测试 API 端点
-curl http://localhost:8080/              # 欢迎页面
+# 测试 API 端点（Milestone 1-2）
+curl http://localhost:8080/              # 聊天 UI 或欢迎页面
 curl http://localhost:8080/health        # 健康检查（JSON）
 curl -X POST http://localhost:8080/echo \
   -H "Content-Type: application/json" \
   -d '{"test":"data"}'                   # Echo 回显
+
+# 测试聊天 API（Milestone 3）
+curl -X POST http://localhost:8080/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Hello!","session_id":""}' # 发送消息
+
+curl http://localhost:8080/metrics       # 系统指标
 
 # 运行单元测试
 ./build/bin/test_http_parser             # HTTP 解析器测试
 ./build/bin/test_router                  # 路由系统测试
 
 # 运行集成测试
-./scripts/quick_test.sh                  # 自动化端到端测试
+./scripts/quick_test.sh                  # Milestone 1-2 测试
+./scripts/test_milestone3.sh             # Milestone 3 完整测试
 ```
 
 ## 里程碑进度
@@ -86,31 +98,53 @@ curl -X POST http://localhost:8080/echo \
 - [x] Milestone 0: 工程骨架 & 最小可跑
 - [x] Milestone 1: 最小服务器 Demo (HTTP 解析 + 路由 + 测试)
 - [x] Milestone 2: 高并发网络与多线程 (epoll + 线程池 + 过载保护)
-- [ ] Milestone 3: 工程化组件
+- [x] Milestone 3: 工程化组件 (Logger 滚动 + Database + Router + UI)
 - [ ] Milestone 4: Docker 化部署
 - [ ] Milestone 5: LLM Serving
 - [ ] Milestone 6: 性能工程
 
-## 性能指标 (Milestone 2)
+## 性能指标
 
+### Milestone 2: 高并发
 - **并发**: 100+ 并发连接
 - **吞吐**: 1785 QPS
 - **延迟**: P99 < 85ms
 - **成功率**: 99.9%
 
+### Milestone 3: 工程化
+- **日志**: 分级 + 滚动（10MB/文件，保留 5 个）
+- **数据库**: SQLite3（会话 + 消息持久化）
+- **路由**: 6 个端点（/, /health, /chat, /history, /metrics, /echo）
+- **UI**: 现代化聊天界面（响应式设计）
+
 ## 项目文档
 
+### 核心文档
 - [README.md](README.md) - 项目说明（本文档）
 - [MILESTONES.md](MILESTONES.md) - 里程碑跟踪
 - [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) - 项目总览
 - [PERFORMANCE.md](PERFORMANCE.md) - 性能测试报告
+
+### 里程碑完成报告
 - [MILESTONE1_SUMMARY.md](MILESTONE1_SUMMARY.md) - M1 完成总结
 - [MILESTONE2_SUMMARY.md](MILESTONE2_SUMMARY.md) - M2 完成总结
+- [MILESTONE3_SUMMARY.md](MILESTONE3_SUMMARY.md) - M3 完成总结（详细技术文档）
+- [MILESTONE3_完成报告.md](MILESTONE3_完成报告.md) - M3 中文报告
+
+### 快速开始
 - [QUICKSTART.md](QUICKSTART.md) - 快速入门
+- [QUICKSTART_MILESTONE3.md](QUICKSTART_MILESTONE3.md) - M3 快速开始
+
+### 安装和构建
+- [MILESTONE3_INSTALL.md](MILESTONE3_INSTALL.md) - M3 安装说明
+- [BUILD_SYSTEM_UPGRADE.md](BUILD_SYSTEM_UPGRADE.md) - 构建系统升级
+- [MAKEFILE_USAGE.md](MAKEFILE_USAGE.md) - Makefile 使用指南
 
 ## 下一步
 
-- Milestone 3: 工程化组件（Logger 增强、Database、UI）
-- Milestone 4: Docker 化部署
-- Milestone 5: LLM Serving
-- Milestone 6: 性能工程（KV-cache、batching）
+✅ **Milestone 3 已完成** - 工程化组件（Logger 滚动 + Database + UI）
+
+**接下来**：
+- Milestone 4: Docker 化部署 & 上线复现
+- Milestone 5: LLM Serving（推理 API + 上下文管理）
+- Milestone 6: 性能工程（KV-cache + batching + 优化报告）

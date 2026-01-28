@@ -73,3 +73,37 @@ cppServer/
 
 详见 `MILESTONES.md`
 
+---
+
+## 🎉 Milestone 3 已完成！
+
+如果你已经完成了 Milestone 0/1/2，现在可以体验 **Milestone 3** 的新功能：
+
+### 新功能
+- ✅ **日志滚动**：自动管理日志文件大小
+- ✅ **SQLite 数据库**：持久化会话和消息
+- ✅ **聊天 API**：`POST /chat` 发送消息
+- ✅ **Web 聊天界面**：现代化 UI，访问 `http://localhost:8080`
+- ✅ **系统指标**：`GET /metrics` 查看统计
+
+### 快速开始 Milestone 3
+
+**详细指南**：[QUICKSTART_MILESTONE3.md](QUICKSTART_MILESTONE3.md)
+
+**3 步启动**：
+```bash
+# 1. 安装依赖
+sudo apt-get install -y libsqlite3-dev
+
+# 2. 编译运行
+make run
+
+# 3. 访问聊天界面
+# 浏览器打开: http://localhost:8080
+```
+
+**完整文档**：
+- [MILESTONE3_SUMMARY.md](MILESTONE3_SUMMARY.md) - 详细技术文档
+- [MILESTONE3_完成报告.md](MILESTONE3_完成报告.md) - 中文报告
+- [MILESTONE3_INSTALL.md](MILESTONE3_INSTALL.md) - 安装说明
+
