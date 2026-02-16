@@ -99,9 +99,9 @@ curl http://localhost:8080/metrics       # 系统指标
 - [x] Milestone 1: 最小服务器 Demo (HTTP 解析 + 路由 + 测试)
 - [x] Milestone 2: 高并发网络与多线程 (epoll + 线程池 + 过载保护)
 - [x] Milestone 3: 工程化组件 (Logger 滚动 + Database + Router + UI)
-- [ ] Milestone 4: Docker 化部署
-- [ ] Milestone 5: LLM Serving
-- [ ] Milestone 6: 性能工程
+- [ ] Milestone 4: LLM Serving
+- [ ] Milestone 5: 性能工程
+- [ ] Milestone 6: Docker 化部署
 
 ## 性能指标
 
@@ -121,30 +121,30 @@ curl http://localhost:8080/metrics       # 系统指标
 
 ### 核心文档
 - [README.md](README.md) - 项目说明（本文档）
-- [MILESTONES.md](MILESTONES.md) - 里程碑跟踪
-- [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) - 项目总览
-- [PERFORMANCE.md](PERFORMANCE.md) - 性能测试报告
+- [MILESTONES.md](notes/01_项目概览/里程碑计划.md) - 里程碑跟踪
+- [PROJECT_OVERVIEW.md](notes/01_项目概览/项目概览.md) - 项目总览
+- [PERFORMANCE.md](notes/06_性能测试/性能报告.md) - 性能测试报告
 
 ### 里程碑完成报告
-- [MILESTONE1_SUMMARY.md](MILESTONE1_SUMMARY.md) - M1 完成总结
-- [MILESTONE2_SUMMARY.md](MILESTONE2_SUMMARY.md) - M2 完成总结
-- [MILESTONE3_SUMMARY.md](MILESTONE3_SUMMARY.md) - M3 完成总结（详细技术文档）
-- [MILESTONE3_完成报告.md](MILESTONE3_完成报告.md) - M3 中文报告
+- [MILESTONE1_SUMMARY.md](notes/02_阶段一_最小服务器/阶段一总结.md) - M1 完成总结
+- [MILESTONE2_SUMMARY.md](notes/03_阶段二_高并发/阶段二总结.md) - M2 完成总结
+- [MILESTONE3_SUMMARY.md](notes/04_阶段三_工程化/阶段三总结.md) - M3 完成总结（详细技术文档）
+- [MILESTONE3_完成报告.md](notes/04_阶段三_工程化/阶段三完成报告.md) - M3 中文报告
 
 ### 快速开始
-- [QUICKSTART.md](QUICKSTART.md) - 快速入门
-- [QUICKSTART_MILESTONE3.md](QUICKSTART_MILESTONE3.md) - M3 快速开始
+- [QUICKSTART.md](notes/01_项目概览/快速入门.md) - 快速入门
+- [QUICKSTART_MILESTONE3.md](notes/04_阶段三_工程化/阶段三快速开始.md) - M3 快速开始
 
 ### 安装和构建
-- [MILESTONE3_INSTALL.md](MILESTONE3_INSTALL.md) - M3 安装说明
-- [BUILD_SYSTEM_UPGRADE.md](BUILD_SYSTEM_UPGRADE.md) - 构建系统升级
-- [MAKEFILE_USAGE.md](MAKEFILE_USAGE.md) - Makefile 使用指南
+- [MILESTONE3_INSTALL.md](notes/04_阶段三_工程化/阶段三安装指南.md) - M3 安装说明
+- [BUILD_SYSTEM_UPGRADE.md](notes/05_构建与运维/构建系统升级.md) - 构建系统升级
+- [MAKEFILE_USAGE.md](notes/05_构建与运维/Makefile使用指南.md) - Makefile 使用指南
 
 ## 下一步
 
 ✅ **Milestone 3 已完成** - 工程化组件（Logger 滚动 + Database + UI）
 
 **接下来**：
-- Milestone 4: Docker 化部署 & 上线复现
-- Milestone 5: LLM Serving（推理 API + 上下文管理）
-- Milestone 6: 性能工程（KV-cache + batching + 优化报告）
+- Milestone 4: LLM Serving（推理 API + 上下文管理）
+- Milestone 5: 性能工程（KV-cache + batching + 优化报告）
+- Milestone 6: Docker 化部署 & 上线复现
